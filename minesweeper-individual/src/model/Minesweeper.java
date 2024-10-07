@@ -3,6 +3,14 @@ package model;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * Minesweeper class that takes in pre-formatted input and translates it to a board complete
+ * with hints while keeping the mines in place. Outputs to a txt file specified on the command line.
+ * 
+ * 
+ * @author Ethan Moore
+ * @version 1.0
+ */
 public final class Minesweeper {
 
     /** The maximum size limit for the minesweeper board. */
