@@ -1,5 +1,6 @@
 package model;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public final class Minesweeper {
@@ -56,46 +57,58 @@ public final class Minesweeper {
      *         dimensions are provided.
      */
     public static char[][] readMinefield() {
+        // Check if there is an integer available for rows
+        if (!scanner.hasNextInt()) {
+            return null;  // No more input, terminate processing
+        }
+        
+        // Read dimensions (n = rows, m = columns)
+        int n = scanner.nextInt();
+        int m = scanner.nextInt();
+        
+        // Termination condition (when n = 0 and m = 0)
+        if (n == 0 && m == 0) {
+            return null;  // End of input
+        }
 
-        // Read in the dimensions of the mine field
-        final int n = scanner.nextInt();
-        final int m = scanner.nextInt();
-
+        // Consume the newline after the integers
         if (scanner.hasNextLine()) {
             scanner.nextLine();
         }
 
-        // Termination condition
-        if (n == 0 && m == 0 || n > MAX_SIZE || m > MAX_SIZE) {
-            return null; // return null to signal end of input
-        }
+        // Create a 2D char array with an additional 2 rows and 2 columns for the buffer
+        char[][] paddedMinefield = new char[n + 2][m + 2];
 
-        // Create a blank mine field with buffer around it
-        final char[][] bufferedMinefield = new char[n + 2][m + 2];
-
-        // Fill the buffer spots with 0's
+        // Initialize the padded minefield buffer with '0' instead of spaces
         for (int i = 0; i < n + 2; i++) {
             for (int j = 0; j < m + 2; j++) {
-                bufferedMinefield[i][j] = '0';
+                paddedMinefield[i][j] = '0';  // Fill buffer with '0'
             }
         }
 
-        // Fill the rest of the mine field according to the input
+        // Read the minefield row by row and place it inside the padded array (starting at index 1,1)
         for (int i = 1; i <= n; i++) {
-            final String row = scanner.nextLine();
-            for (int j = 1; j <= m; j++) {
-                final char currentChar = row.charAt(j - 1);
-                // Replace the safe spaces with '0', otherwise keep mines as '*'
-                if (currentChar == '.') {
-                    bufferedMinefield[i][j] = '0';
-                } else {
-                    bufferedMinefield[i][j] = currentChar;
+            if (scanner.hasNextLine()) {
+                String row = scanner.nextLine();  // Read each row as a string
+                for (int j = 1; j <= m; j++) {
+                    char currentChar = row.charAt(j - 1);
+                    if (currentChar == '.') {
+                        // Replace safe squares with '0'
+                        paddedMinefield[i][j] = '0';
+                    } else {
+                        // Keep mines as '*'
+                        paddedMinefield[i][j] = currentChar;
+                    }
                 }
+            } else {
+                // If no more lines, return null or throw an exception if the format is wrong
+                throw new NoSuchElementException("Expected more rows for the minefield but found none.");
             }
         }
 
-        return bufferedMinefield;
+        return paddedMinefield;  // Return the padded minefield
     }
+
 
     /**
      * Processes the minefield and updates it with hint values. Each hint represents
