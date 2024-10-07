@@ -41,7 +41,7 @@ public class Minesweeper {
 		}
 		
 		// Termination condition
-		if (n == 0 && m == 0) {
+		if (n == 0 && m == 0 || n > 100 || m > 100) {
 			return null; // return null to signal end of input
 		}
 		
