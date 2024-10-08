@@ -17,8 +17,6 @@ public final class Minesweeper {
     static final int MAX_SIZE = 100;
     /** The number of neighbors in a given square. */
     static final int NUMBER_OF_DIRECTIONS = 8;
-    /** Scanner used to pass in and output information. */
-    private static Scanner scanner = new Scanner(System.in);
     
     /** Private constructor to prohibit instantiation. */
     private Minesweeper() { }
@@ -32,12 +30,12 @@ public final class Minesweeper {
      * @param theArgs Command-line arguments (not used).
      */
     public static void main(final String[] theArgs) {
-
+        Scanner scanner = new Scanner(System.in);
         int fieldCount = 1;
 
         while (true) {
             // Read the mine field
-            final char[][] minefield = readMinefield();
+            final char[][] minefield = readMinefield(scanner);
 
             // Check for termination (when n = 0 and m = 0)
             if (minefield == null) {
@@ -60,19 +58,25 @@ public final class Minesweeper {
      * minefield where the outer layer is filled with '0' to simplify neighbor 
      * checking. The method returns the minefield with buffered rows and columns.
      * 
+     * @param scanner The scanner to read input from.
      * @return A 2D char array representing the buffered minefield, or null if 
      *         the termination condition is met (n = 0, m = 0) or invalid input 
      *         dimensions are provided.
      */
-    public static char[][] readMinefield() {
+    public static char[][] readMinefield(Scanner scanner) {
         // Check if there is an integer available for rows
         if (!scanner.hasNextInt()) {
             return null;  // No more input, terminate processing
         }
-        
+
         // Read dimensions (n = rows, m = columns)
         int n = scanner.nextInt();
         int m = scanner.nextInt();
+
+        // Check for invalid dimensions (greater than MAX_SIZE)
+        if (n > MAX_SIZE || m > MAX_SIZE) {
+            return null; // Return null if dimensions exceed limits
+        }
         
         // Termination condition (when n = 0 and m = 0)
         if (n == 0 && m == 0) {
@@ -116,7 +120,6 @@ public final class Minesweeper {
 
         return paddedMinefield;  // Return the padded minefield
     }
-
 
     /**
      * Processes the minefield and updates it with hint values. Each hint represents

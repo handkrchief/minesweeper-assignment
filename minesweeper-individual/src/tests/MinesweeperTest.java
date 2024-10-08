@@ -2,34 +2,33 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-
 import model.Minesweeper;
-
 import java.io.ByteArrayInputStream;
+import java.util.Scanner;
 
 class MinesweeperTest {
-
+    
     @Test
     void testReadMinefield() {
-    	
-    	// Simulate user input for a 2x2 minefield
-    	String input = "2 2\n.*\n*. \n";
-    	System.setIn(new ByteArrayInputStream(input.getBytes()));
-    	
-    	// Expected output after reading the input
-    	char[][] expected = {
-    			{'0', '0', '0', '0'},
-    			{'0', '0', '*', '0'},
-    			{'0', '*', '0', '0'},
-    			{'0', '0', '0', '0'}
-    	};
-    	
-    	// Call the readMinefield method on our user input
-    	char[][] result = Minesweeper.readMinefield();
-    	
-    	// Compare with our expected result
-    	assertArrayEquals(expected, result);
+        // Simulate user input for a 2x2 minefield
+        String input = "2 2\n.*\n*.\n";  // Correct input format
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+
+        // Expected output after reading the input
+        char[][] expected = {
+            {'0', '0', '0', '0'},  // Buffer row
+            {'0', '0', '*', '0'},  // Row 1 of the minefield (buffer + actual row)
+            {'0', '*', '0', '0'},  // Row 2 of the minefield (buffer + actual row)
+            {'0', '0', '0', '0'}   // Buffer row
+        };
+
+        // Call the readMinefield method with the scanner
+        char[][] result = Minesweeper.readMinefield(testScanner);
+
+        // Compare with our expected result
+        assertArrayEquals(expected, result);
     }
+
     
     @Test
     void testProduceHints() {
@@ -87,13 +86,12 @@ class MinesweeperTest {
     void testInvalidInputExceedsMaxSize() {
         // Simulate user input where dimensions exceed MAX_SIZE
         String input = "101 101\n";  // Both n and m exceed MAX_SIZE (100)
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
 
-        // Call the readMinefield method
-        char[][] result = Minesweeper.readMinefield();
+        // Call the readMinefield method with the scanner
+        char[][] result = Minesweeper.readMinefield(testScanner);
 
         // Assert that the result is null due to exceeding size limits
         assertNull(result);
     }
-
 }
