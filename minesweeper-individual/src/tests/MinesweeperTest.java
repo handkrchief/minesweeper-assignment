@@ -94,4 +94,98 @@ class MinesweeperTest {
         // Assert that the result is null due to exceeding size limits
         assertNull(result);
     }
+    
+    @Test
+    void testSingleCellMinefield() {
+        String input = "1 1\n*\n";  // Single cell minefield with a mine
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+
+        char[][] expected = {
+            {'0', '0', '0'},  // Buffer row
+            {'0', '*', '0'},  // Row 1 (single cell)
+            {'0', '0', '0'}   // Buffer row
+        };
+
+        char[][] result = Minesweeper.readMinefield(testScanner);
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    void testZeroDimensionInput() {
+        String input = "0 0\n";  // Input indicating end of input (termination)
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+
+        // Call the readMinefield method
+        char[][] result = Minesweeper.readMinefield(testScanner);
+
+        // Assert that the result is null, indicating end of input
+        assertNull(result);
+    }
+
+    @Test
+    void testSingleRowMinefield() {
+        String input = "1 3\n.*.\n";
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+
+        char[][] expected = {
+            {'0', '0', '0', '0', '0'},  // Buffer row
+            {'0', '0', '*', '0', '0'},  // Row 1
+            {'0', '0', '0', '0', '0'}   // Buffer row
+        };
+
+        char[][] result = Minesweeper.readMinefield(testScanner);
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    void testSingleColumnMinefield() {
+        String input = "3 1\n*\n.\n*\n";
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+
+        char[][] expected = {
+            {'0', '0', '0'},  // Buffer row
+            {'0', '*', '0'},  // Row 1
+            {'0', '0', '0'},  // Row 2
+            {'0', '*', '0'},  // Row 3
+            {'0', '0', '0'}   // Buffer row
+        };
+
+        char[][] result = Minesweeper.readMinefield(testScanner);
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    void testAllMines() {
+        String input = "2 2\n**\n**\n";  // All mines
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+
+        char[][] expected = {
+            {'0', '0', '0', '0'},  // Buffer row
+            {'0', '*', '*', '0'},  // Row 1
+            {'0', '*', '*', '0'},  // Row 2
+            {'0', '0', '0', '0'}   // Buffer row
+        };
+
+        char[][] result = Minesweeper.readMinefield(testScanner);
+        assertArrayEquals(expected, result);
+    }
+
+    @Test
+    void testMixedMinesAndSafeSquares() {
+        String input = "3 3\n*..\n.*.\n..*\n";
+        Scanner testScanner = new Scanner(new ByteArrayInputStream(input.getBytes()));
+
+        char[][] expected = {
+            {'0', '0', '0', '0', '0'},  // Buffer row
+            {'0', '*', '0', '0', '0'},  // Row 1
+            {'0', '0', '*', '0', '0'},  // Row 2
+            {'0', '0', '0', '*', '0'},  // Row 3
+            {'0', '0', '0', '0', '0'}   // Buffer row
+        };
+
+        char[][] result = Minesweeper.readMinefield(testScanner);
+        assertArrayEquals(expected, result);
+    }
+
+    
 }
